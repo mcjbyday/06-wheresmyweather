@@ -40,25 +40,47 @@
 // var cityName = prompt("Provide a city name");
 // var cityName = "Chicago";
 // var cityCodeRequest = "https://api.openweathermap.org/data/2.5/weather?q="+cityName+"&appid="+key;
+// one call you get the lat and long before you pass
+
+//geocoding api
+
 
 // var weatherInfoRequest = " api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=" + key;
 
-
+// open weather  api key
 let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
-
+// OMDB api key
 let OMDbkey = "7a459757";
 
-var bigEl = document.createElement('h1');
+// array of strings in local storage .. keep track of the last 10 only
+
+var latlongEl = document.createElement('h1');
+var bigCityEl = document.createElement('h1');
+var bigWeatherEl = document.createElement('h1');
 var movieEl = document.createElement('h1');
 var congressEl = document.createElement('img');
 
-fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=51.5073&lon=-0.1277&appid=${key}`)
+// geocoding API fetch
+fetch(`https://api.openweathermap.org/geo/1.0/direct?q=Chicago&appid=${key}`)
 .then(response => response.json())
-.then(data => {
+.then(latlongData => {
+    
+    console.log(latlongData);
+    latlongEl.textContent = latlongData[0].lat + " " + latlongData[0].lon;
+    bigCityEl.textContent = "it is I... ya boy from " + latlongData[0].name;
+    // forecasting API fetch, using geo data as parameter to pass
+    return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
+})
+.then(response => response.json())
+.then(cityData => {
 
-    console.log(data);
-    bigEl.textContent = "it is I... ya boy from " + data.city.name;
+    console.log(cityData);
+
+    bigWeatherEl.textContent = "we outhere getting some: " + cityData.list[0].weather[0].main;
+
 });
+
+
 
 
  fetch(`https://www.omdbapi.com/?apikey=${OMDbkey}&t=clerks`)
@@ -77,8 +99,11 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=51.5073&lon=-0.1277&
  })
 
 
+document.body.appendChild(latlongEl);
+document.body.appendChild(bigCityEl);
+document.body.appendChild(bigWeatherEl);
 
-document.body.appendChild(bigEl);
+
 document.body.appendChild(movieEl);
 document.body.appendChild(congressEl);
 
