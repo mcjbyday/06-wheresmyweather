@@ -7,25 +7,26 @@
 // open weather  api key. no .env since this key is freely available
 let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
 
-// get city name from user form 
+ 
 
 // placeholder until bootstrap elements are defined
-var latlongEl = document.createElement('h1');
-var bigCityEl = document.createElement('h1');
+var bigCityEl = document.querySelector('.card-title');
 var bigWeatherEl = document.createElement('h1');
 
+var currentCityTemp = document.getElementById("#current_city_temp");
+var currentCityWind = document.getElementById("#current_city_wind");
+var currentCityHumid = document.getElementById("#current_city_humidity");
+var currentCityUVI = document.getElementById("#current_city_UVI");
+var currentWeatherIcon = document.querySelector(".current_weather_icon");
 
-// user input cluster of tags
-// document.body.appendChild(userCityInputEl);
-// document.body.appendChild(searchButton);
-
+// get city name from user form
 // var userCityInputEl = document.createElement('input');
 var userCityInputEl = document.querySelector('.form-control');
 // hook into button it clicking when a keyup equals enter in the form field
 var searchButton = document.querySelector('.btn');
 
 searchButton.addEventListener('click', function() {
-    console.log(userCityInputEl.value)
+    // console.log(userCityInputEl.value)
     var inputText = userCityInputEl.value;
     getWeather(inputText);
 });    
@@ -42,55 +43,46 @@ userCityInputEl.addEventListener("keyup", e => {
 });    
 
 
-// non-interactive display cluster of tags
-document.body.appendChild(latlongEl);
-document.body.appendChild(bigCityEl);
-document.body.appendChild(bigWeatherEl);
-
-
-
 function getWeather(cityname) {
-    console.log(cityname);
+    // console.log(cityname);
     // geocoding API fetch
     fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${cityname}&appid=${key}`)
     .then(response => response.json())
     .then(latlongData => {
         
-        console.log(latlongData);
-        latlongEl.textContent = latlongData[0].lat + " " + latlongData[0].lon;
-        bigCityEl.textContent = "I am from " + latlongData[0].name;
+        // console.log(latlongData);
+        // latlongEl.textContent = latlongData[0].lat + " " + latlongData[0].lon;
+        bigCityEl.textContent = latlongData[0].name;
         // forecasting API fetch, using geo data as parameter to pass
         return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
-        
     })
     .then(response => response.json())
     .then(cityData => {
-        
-        console.log(cityData);
-        
-        bigWeatherEl.textContent = "we are getting some: " + cityData.list[0].weather[0].main;
+        // console.log(cityData);
+        // currentWeatherIcon.style = `https://openweathermap.org/img/w/${cityData.list[0].weather[0].main}.png`;
+        // bigWeatherEl.textContent = cityData.list[0].weather[0].main;
         
     });
 
 }
 
-function getForecast(cityname) {
-    // EITHER
-    // fetch(`https://FOO.COM/api/${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
-    // OR
-    fetch(`https://FOO.COM/api/${cityname}&appid=${key}`)
-    .then(response => response.json())
-    .then(forecastData => {
-        console.log(forecastData);
-        // update display elements...
-    });
-}
+// function getForecast(cityname) {
+//     // EITHER
+//     // fetch(`https://FOO.COM/api/${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
+//     // OR
+//     fetch(`https://FOO.COM/api/${cityname}&appid=${key}`)
+//     .then(response => response.json())
+//     .then(forecastData => {
+//         // console.log(forecastData);
+//         // update display elements...
+//     });
+// }
 
 // card element forecast generation prototype/pseudocode
 var forecastContainerEl = $('.forecast_card_container');
 
 for (i = 0; i < 5; i++) {
-    var forecastCard = $(`<div class="card text-white bg-dark mb-3" style="max-width: 12rem;"><div class="card-header">Card number ${i}</div><div class="card-body"><h5 class="card-title">Card number ${i}</h5><p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p></div></div>`);
+    var forecastCard = $(`<div class="card text-white bg-dark mb-3" style="min-width: 12rem; max-width: 12rem;"><div class="card-body"><h5 class="card-title">Card number ${i}</h5><p class="card-text">Lorem ipsum dolor sit amet.</p><p class="card-text">Lorem ipsum dolor sit amet.</p><p class="card-text">Lorem ipsum dolor sit amet.</p><p class="card-text">Lorem ipsum dolor sit amet.</p></div></div>`);
     forecastContainerEl.append(forecastCard);
 }
 
