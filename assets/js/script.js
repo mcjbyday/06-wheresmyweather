@@ -1,62 +1,48 @@
-
-// open weather  api key
-let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
-// .env use that file 'require it'
-// .gitignore
-// OMDB api key
-// let OMDbkey = "7a459757";
-
-// get city name from user form 
-// focus on one word easy case. substitute spaces for +'s later to pass city data
-var userCityInputEl = document.createElement('input');
-var searchButton = document.createElement('button');
-// set an id for the button. trigger it clicking when a keyup equals enter in the form field
-searchButton.setAttribute("id","search_btn");
-searchButton.innerText = "Search";
-
-var latlongEl = document.createElement('h1');
-var bigCityEl = document.createElement('h1');
-var bigWeatherEl = document.createElement('h1');
-
-// materialize > foundation. foundation was hard to work with... some are paid. make sure it's free. 
-
-document.body.appendChild(userCityInputEl);
-
-userCityInputEl.addEventListener("keyup", e => {
-    // console.log(e);
-    // console.log(userCityInputEl.value);
-    if (e.keyCode === 13) {
-        e.preventDefault();
-        document.getElementById('search_btn').click();
-    }
-});
-
-searchButton.addEventListener('click', function() {
-    var inputText = userCityInputEl.value;
-    getWeather(inputText);
-});
-
-
-document.body.appendChild(searchButton);
-document.body.appendChild(latlongEl);
-document.body.appendChild(bigCityEl);
-document.body.appendChild(bigWeatherEl);
-
-
-// document.body.appendChild(movieEl);
-// document.body.appendChild(congressEl);
-
-// var movieEl = document.createElement('h1');
-// var congressEl = document.createElement('img');
-
 // use bootsrtap card elements for display of the weather data (// achieve display for wind speed, temperature, UV index, humidity)
 // use bootstrap to get list elements .. https://getbootstrap.com/docs/5.1/components/list-group/
 // local storage of city names entered (last 10)
 // image icons // var icon = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
 // error handling pass... 
 
+// open weather  api key. no .env since this key is freely available
+let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
 
-// appearance is last
+// get city name from user form 
+// focus on one word easy case. substitute spaces for +'s later to pass city data
+var userCityInputEl = document.createElement('input');
+// hook into button it clicking when a keyup equals enter in the form field
+var searchButton = document.querySelector('.btn');
+
+
+// placeholder until bootstrap elements are defined
+var latlongEl = document.createElement('h1');
+var bigCityEl = document.createElement('h1');
+var bigWeatherEl = document.createElement('h1');
+
+
+// user input cluster of tags
+document.body.appendChild(userCityInputEl);
+// document.body.appendChild(searchButton);
+
+
+userCityInputEl.addEventListener("keyup", e => {
+    // console.log(e);
+    // console.log(userCityInputEl.value);
+    if (e.code === 13) {
+        document.getElementById('search_btn').click();
+    }    
+});    
+
+searchButton.addEventListener('click', function() {
+    var inputText = userCityInputEl.value;
+    getWeather(inputText);
+});    
+
+// non-interactive display cluster of tags
+document.body.appendChild(latlongEl);
+document.body.appendChild(bigCityEl);
+document.body.appendChild(bigWeatherEl);
+
 
 
 function getWeather(cityname) {
