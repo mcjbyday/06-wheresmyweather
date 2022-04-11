@@ -1,3 +1,93 @@
+
+// open weather  api key
+let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
+// OMDB api key
+let OMDbkey = "7a459757";
+
+
+// get city name from user form 
+// focus on one word easy case. substitute spaces for +'s later to pass city data
+var userCityInputEl = document.createElement('input');
+var searchButton = document.createElement('button');
+// set an id for the button. trigger it clicking when a keyup equals enter in the form field
+searchButton.setAttribute("id","search_btn");
+searchButton.innerText = "Search";
+
+var latlongEl = document.createElement('h1');
+var bigCityEl = document.createElement('h1');
+var bigWeatherEl = document.createElement('h1');
+var movieEl = document.createElement('h1');
+var congressEl = document.createElement('img');
+
+function getWeather(cityname) {
+    console.log(cityname);
+    // geocoding API fetch
+    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${cityname}&appid=${key}`)
+    .then(response => response.json())
+    .then(latlongData => {
+        
+        console.log(latlongData);
+        latlongEl.textContent = latlongData[0].lat + " " + latlongData[0].lon;
+        bigCityEl.textContent = "it is I... ya boy from " + latlongData[0].name;
+        // forecasting API fetch, using geo data as parameter to pass
+        return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
+    })
+    .then(response => response.json())
+    .then(cityData => {
+
+        console.log(cityData);
+
+        bigWeatherEl.textContent = "we outhere getting some: " + cityData.list[0].weather[0].main;
+
+    });
+
+}
+
+
+ fetch(`https://www.omdbapi.com/?apikey=${OMDbkey}&t=clerks`)
+ .then(response => response.json())
+ .then(data => {
+     console.log(data);
+    movieEl.textContent = data.Title + " released on " + data.Released;
+ })
+
+
+ fetch(`https://www.loc.gov/item/92522692?fo=json`)
+ .then(response => response.json())
+ .then(data => {
+     console.log(data.item.image_url);
+    congressEl.src = data.item.image_url;
+ })
+
+document.body.appendChild(userCityInputEl);
+
+userCityInputEl.addEventListener("keyup", e => {
+    // console.log(e);
+    // console.log(userCityInputEl.value);
+    if (e.keyCode === 13) {
+        e.preventDefault();
+        document.getElementById('search_btn').click();
+    }
+});
+
+searchButton.addEventListener('click', function() {
+    var inputText = userCityInputEl.value;
+    getWeather(inputText);
+});
+
+
+document.body.appendChild(searchButton);
+document.body.appendChild(latlongEl);
+document.body.appendChild(bigCityEl);
+document.body.appendChild(bigWeatherEl);
+
+
+document.body.appendChild(movieEl);
+document.body.appendChild(congressEl);
+
+
+
+
 // GIVEN a weather dashboard with form inputs
 // WHEN I search for a city
 // THEN I am presented with current and future conditions for that city 
@@ -14,6 +104,9 @@
 
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
+
+//  view last 10 cities searched .. i.e store inputs into local storage?
+// array of strings in local storage .. keep track of the last 10 only
 
 // TO DO 06
 // three api calls:
@@ -33,79 +126,9 @@
 
 // var badRequestUrl = 'https://api.github.com/unicorns';
 // var redirectUrl = './404.html';
-// pass city?
-
-// get city name from user form 
-// put into local storage?
-// var cityName = prompt("Provide a city name");
-// var cityName = "Chicago";
-// var cityCodeRequest = "https://api.openweathermap.org/data/2.5/weather?q="+cityName+"&appid="+key;
-// one call you get the lat and long before you pass
-
-//geocoding api
+// DONE pass city?
 
 
-// var weatherInfoRequest = " api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=" + key;
-
-// open weather  api key
-let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
-// OMDB api key
-let OMDbkey = "7a459757";
-
-// array of strings in local storage .. keep track of the last 10 only
-
-var latlongEl = document.createElement('h1');
-var bigCityEl = document.createElement('h1');
-var bigWeatherEl = document.createElement('h1');
-var movieEl = document.createElement('h1');
-var congressEl = document.createElement('img');
-
-// geocoding API fetch
-fetch(`https://api.openweathermap.org/geo/1.0/direct?q=Chicago&appid=${key}`)
-.then(response => response.json())
-.then(latlongData => {
-    
-    console.log(latlongData);
-    latlongEl.textContent = latlongData[0].lat + " " + latlongData[0].lon;
-    bigCityEl.textContent = "it is I... ya boy from " + latlongData[0].name;
-    // forecasting API fetch, using geo data as parameter to pass
-    return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
-})
-.then(response => response.json())
-.then(cityData => {
-
-    console.log(cityData);
-
-    bigWeatherEl.textContent = "we outhere getting some: " + cityData.list[0].weather[0].main;
-
-});
-
-
-
-
- fetch(`https://www.omdbapi.com/?apikey=${OMDbkey}&t=clerks`)
- .then(response => response.json())
- .then(data => {
-     console.log(data);
-    movieEl.textContent = data.Title + " released on " + data.Released;
- })
-
-
- fetch(`https://www.loc.gov/item/92522692?fo=json`)
- .then(response => response.json())
- .then(data => {
-     console.log(data.item.image_url);
-    congressEl.src = data.item.image_url;
- })
-
-
-document.body.appendChild(latlongEl);
-document.body.appendChild(bigCityEl);
-document.body.appendChild(bigWeatherEl);
-
-
-document.body.appendChild(movieEl);
-document.body.appendChild(congressEl);
 
 
 
