@@ -4,7 +4,6 @@ let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
 // OMDB api key
 let OMDbkey = "7a459757";
 
-
 // get city name from user form 
 // focus on one word easy case. substitute spaces for +'s later to pass city data
 var userCityInputEl = document.createElement('input');
@@ -44,20 +43,20 @@ function getWeather(cityname) {
 }
 
 
- fetch(`https://www.omdbapi.com/?apikey=${OMDbkey}&t=clerks`)
- .then(response => response.json())
- .then(data => {
-     console.log(data);
-    movieEl.textContent = data.Title + " released on " + data.Released;
- })
+//  fetch(`https://www.omdbapi.com/?apikey=${OMDbkey}&t=clerks`)
+//  .then(response => response.json())
+//  .then(data => {
+//      console.log(data);
+//     movieEl.textContent = data.Title + " released on " + data.Released;
+//  })
 
 
- fetch(`https://www.loc.gov/item/92522692?fo=json`)
- .then(response => response.json())
- .then(data => {
-     console.log(data.item.image_url);
-    congressEl.src = data.item.image_url;
- })
+//  fetch(`https://www.loc.gov/item/92522692?fo=json`)
+//  .then(response => response.json())
+//  .then(data => {
+//      console.log(data.item.image_url);
+//     congressEl.src = data.item.image_url;
+//  })
 
 document.body.appendChild(userCityInputEl);
 
