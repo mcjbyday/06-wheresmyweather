@@ -9,9 +9,6 @@ let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
 
 // get city name from user form 
 // focus on one word easy case. substitute spaces for +'s later to pass city data
-var userCityInputEl = document.createElement('input');
-// hook into button it clicking when a keyup equals enter in the form field
-var searchButton = document.querySelector('.btn');
 
 
 // placeholder until bootstrap elements are defined
@@ -21,22 +18,31 @@ var bigWeatherEl = document.createElement('h1');
 
 
 // user input cluster of tags
-document.body.appendChild(userCityInputEl);
+// document.body.appendChild(userCityInputEl);
 // document.body.appendChild(searchButton);
 
-
-userCityInputEl.addEventListener("keyup", e => {
-    // console.log(e);
-    // console.log(userCityInputEl.value);
-    if (e.code === 13) {
-        document.getElementById('search_btn').click();
-    }    
-});    
+// var userCityInputEl = document.createElement('input');
+var userCityInputEl = document.querySelector('.form-control');
+// hook into button it clicking when a keyup equals enter in the form field
+var searchButton = document.querySelector('.btn');
 
 searchButton.addEventListener('click', function() {
+    console.log(userCityInputEl.value)
     var inputText = userCityInputEl.value;
     getWeather(inputText);
 });    
+
+
+userCityInputEl.addEventListener("keyup", e => {
+    // console.log(e.keyCode);
+    if (e.keyCode === 13) {
+        // e.preventDefault();
+        document.getElementById("search_btn").click();
+    }    
+    // console.log(e);
+    // console.log(userCityInputEl.value);
+});    
+
 
 // non-interactive display cluster of tags
 document.body.appendChild(latlongEl);
