@@ -8,8 +8,6 @@
 let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
 
 // get city name from user form 
-// focus on one word easy case. substitute spaces for +'s later to pass city data
-
 
 // placeholder until bootstrap elements are defined
 var latlongEl = document.createElement('h1');
@@ -36,7 +34,7 @@ searchButton.addEventListener('click', function() {
 userCityInputEl.addEventListener("keyup", e => {
     // console.log(e.keyCode);
     if (e.keyCode === 13) {
-        // e.preventDefault();
+        e.preventDefault();
         document.getElementById("search_btn").click();
     }    
     // console.log(e);
@@ -72,7 +70,6 @@ function getWeather(cityname) {
         
         bigWeatherEl.textContent = "we are getting some: " + cityData.list[0].weather[0].main;
         
-
     });
 
 }
@@ -88,6 +85,24 @@ function getForecast(cityname) {
         // update display elements...
     });
 }
+
+// card element forecast generation prototype/pseudocode
+var forecastContainerEl = $('.forecast_card_container');
+
+for (i = 0; i < 5; i++) {
+    var forecastCard = $(`<div class="card text-white bg-dark mb-3" style="max-width: 12rem;"><div class="card-header">Card number ${i}</div><div class="card-body"><h5 class="card-title">Card number ${i}</h5><p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p></div></div>`);
+    forecastContainerEl.append(forecastCard);
+}
+
+// prior searches list item generation prototype/pseudocode
+// local storage prior searches list item 
+var pastSearchContainerEl = $('.list-group');
+for (i = 0; i < 5; i++) {
+    var pastSearchItemEl = $(`<a href="#" class="list-group-item list-group-item-action list-group-item-dark" >A simple dark list group item number ${i}</a>`);
+    //style="min-width: 8rem;"
+    pastSearchContainerEl.append(pastSearchItemEl);
+}
+
 
 // GIVEN a weather dashboard with form inputs
 // WHEN I search for a city
