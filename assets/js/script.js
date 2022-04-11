@@ -11,7 +11,7 @@ let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
 
 // placeholder until bootstrap elements are defined
 var bigCityEl = document.querySelector('.card-title');
-var bigWeatherEl = document.createElement('h1');
+// var bigWeatherEl = document.createElement('h1');
 
 var currentCityTemp = document.getElementById("#current_city_temp");
 var currentCityWind = document.getElementById("#current_city_wind");
@@ -29,6 +29,7 @@ searchButton.addEventListener('click', function() {
     // console.log(userCityInputEl.value)
     var inputText = userCityInputEl.value;
     getWeather(inputText);
+    getForecast(inputText);
 });    
 
 
@@ -52,31 +53,33 @@ function getWeather(cityname) {
         
         // console.log(latlongData);
         // latlongEl.textContent = latlongData[0].lat + " " + latlongData[0].lon;
-        bigCityEl.textContent = latlongData[0].name;
+        // bigCityEl.textContent = latlongData[0].name;
         // forecasting API fetch, using geo data as parameter to pass
         return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
     })
     .then(response => response.json())
     .then(cityData => {
-        // console.log(cityData);
-        // currentWeatherIcon.style = `https://openweathermap.org/img/w/${cityData.list[0].weather[0].main}.png`;
-        // bigWeatherEl.textContent = cityData.list[0].weather[0].main;
-        
+        // things
     });
 
 }
 
-// function getForecast(cityname) {
-//     // EITHER
-//     // fetch(`https://FOO.COM/api/${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
-//     // OR
-//     fetch(`https://FOO.COM/api/${cityname}&appid=${key}`)
-//     .then(response => response.json())
-//     .then(forecastData => {
-//         // console.log(forecastData);
-//         // update display elements...
-//     });
-// }
+function getForecast(cityname) {
+    // EITHER
+    // fetch(`https://FOO.COM/api/${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
+    // OR
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${key}`)
+    .then(response => response.json())
+    .then(forecastData => {
+        // console.log(forecastData.weather[0].icon);
+        var iconEl = document.createElement('img');
+        iconEl.src = `https://openweathermap.org/img/wn/${forecastData.weather[0].icon}.png`;
+        bigCityEl.textContent = cityname;
+        bigCityEl.appendChild(iconEl);
+        
+        // update display elements...
+    });
+}
 
 // card element forecast generation prototype/pseudocode
 var forecastContainerEl = $('.forecast_card_container');
@@ -94,6 +97,16 @@ for (i = 0; i < 5; i++) {
     //style="min-width: 8rem;"
     pastSearchContainerEl.append(pastSearchItemEl);
 }
+// console.log(https://openweathermap.org/img/wn/${weather.weather[0].icon}.png;
+// congressEl.src = data.item.image_url;
+// var iconEl = bigCityEl.insertAdjacentElement('beforeend','span');
+// var iconAddress = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
+// iconEl.src = ;
+// var iconAddress = `https://openweathermap.org/img/w/${cityData.list[0].weather[0].main}.png`;
+// currentWeatherIcon.setAttribute("style","content: URL(${`https://openweathermap.org/img/w/${cityData.list[0].weather[0].main}.png`}");
+// bigWeatherEl.textContent = cityData.list[0].weather[0].main;
+        
+
 
 
 // GIVEN a weather dashboard with form inputs
