@@ -66,7 +66,7 @@ function initializeSearchHistory() {
         displaySearchHistory();
     }
     else {
-        var placeholderSearchItemEl = $(`<li class="list-group-item list-group-item-action list-group-item-dark text-center past-search-item" >Prior city searches will appear here...</li>`);
+        var placeholderSearchItemEl = $(`<li class="list-group-item list-group-item-action list-group-item-dark text-center past-search-item" data-ref="Cupertino">Prior city searches will appear here...</li>`);
         searchListContainerEl.append(placeholderSearchItemEl);
     }
 }
