@@ -12,9 +12,9 @@
 let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
  
 // select relevant page tags for DOM content injection
-var bigCityEl = $('.current_city_name');
-var bigCurrentDate = $('.current_date');
-var iconEl = $('.icon_span');
+var bigCityEl = $('#current_city_name');
+var bigCurrentDate = $('#current_date');
+var iconEl = $('#icon_span');
 var currentCityTemp = $("#current_city_temp");
 var currentCityWind = $("#current_city_wind");
 var currentCityHumid = $("#current_city_humidity");
@@ -121,14 +121,14 @@ function getWeather(cityname) {
     fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${cityname}&appid=${key}`)
     .then(response => response.json())
     .then(latlongData => {
-        return fetch(`https://api.openweathermap.org/data/2.5/forecast?units=imperial&lat=${(latlongData[0].lat).toFixed(4)}&lon=${(latlongData[0].lon).toFixed(4)}&appid=${key}`)
+        return fetch(`https://api.openweathermap.org/data/2.5/forecast?units=imperial&lat=${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
     })
     .then(response => response.json())
     .then(forecastData => {
         console.log("forecast API");
         console.log(forecastData);
-        var days = 8;
-        console.log(moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY"));
+        var days = 6;
+        // console.log(moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY"));
         for (i = 0; i < 5; i++) {
             var dt = moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY");
             var forecastCard = $(`<div class="card text-white bg-dark mb-3 five-day" style="min-width: 12rem; max-width: 12rem;"><div class="card-body"><h5 class="card-title">${dt}</h5><p class="card-text">ICON</p><p class="card-text">Temp: ${forecastData.list[days].main.temp} F</p><p class="card-text">Wind: ${forecastData.list[days].wind.speed} MPH</p><p class="card-text">Humidity: ${forecastData.list[days].main.humidity} %</p></div></div>`);
@@ -142,8 +142,10 @@ function getForecast(cityname) {
     // geocoding API fetch
     fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${cityname}&appid=${key}`)
     .then(response => response.json())
-    .then(latlongData => {
-        return fetch(`https://api.openweathermap.org/data/2.5/onecall?${latlongData[0].lat}&lon=${latlongData[0].lon}&exclude=hourly,daily&appid=${key}`)
+    .then(latlongData2 => {
+        var shortLat = (latlongData2[0].lat).toFixed(2);
+        var shortLon = (latlongData2[0].lon).toFixed(2);
+        return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${shortLat}&lon=${shortLon}&exclude=hourly,daily&appid=${key}`)
     })
     .then(response => response.json())
     .then(weatherData => {
@@ -151,10 +153,10 @@ function getForecast(cityname) {
         // console.log(forecastData.weather[0].icon);
         console.log("this is weather");
         console.log(weatherData);
-        bigCityEl.val(cityname);
-        iconEl.src = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`;
-        bigCurrentDate.val(moment.unix(weatherData.list[0].dt).format("MM/DD/YYYY"));
-        
+        bigCityEl.text = cityname;
+        iconEl.src = `https://openweathermap.org/img/wn/${weatherData.current.weather[0].icon}.png`;
+        bigCurrentDate.text = moment.unix(weatherData.current.dt).format("MM/DD/YYYY");
+        currentCityUVI.text = "UV Index: " + weatherData.current.uvi + ""
     });
 }
 
