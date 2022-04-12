@@ -138,11 +138,15 @@ function getWeather(cityname) {
     .then(forecastData => {
         // console.log("forecast API");
         // console.log(forecastData);
-        var days = 6;
+        var days = 7;
+        var alph = "abcdef";
         // console.log(moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY"));
         for (i = 0; i < 5; i++) {
             var dt = moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY");
-            var forecastCard = $(`<div class="card text-white bg-dark mb-3 five-day" style="min-width: 12rem; max-width: 12rem;"><div class="card-body"><h5 class="card-title">${dt}</h5><p class="card-text">ICON</p><p class="card-text">Temp: ${forecastData.list[days].main.temp} F</p><p class="card-text">Wind: ${forecastData.list[days].wind.speed} MPH</p><p class="card-text">Humidity: ${forecastData.list[days].main.humidity} %</p></div></div>`);
+            var letr = alph[i];
+            var imageSrc = `https://openweathermap.org/img/wn/${forecastData.list[days].weather[0].icon}.png`;
+            console.log(imageSrc);
+            var forecastCard = $(`<div class="card text-white bg-dark mb-3 five-day" style="min-width: 12rem; max-width: 12rem;"><div class="card-body"><h5 class="card-title">${dt}</h5><p class="card-text "><img src="${imageSrc}"></p><p class="card-text">Temp: ${forecastData.list[days].main.temp} F</p><p class="card-text">Wind: ${forecastData.list[days].wind.speed} MPH</p><p class="card-text">Humidity: ${forecastData.list[days].main.humidity} %</p></div></div>`);
             forecastContainerEl.append(forecastCard);
             days += 8;
         }
@@ -200,6 +204,3 @@ function uvSpanDisplay(uvi) {
 
 // WHEN I view future weather conditions for that city
 // THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-
-// WHEN I click on a city in the search history
-// THEN I am again presented with current and future conditions for that city
