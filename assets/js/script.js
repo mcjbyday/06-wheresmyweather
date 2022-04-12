@@ -160,10 +160,6 @@ function getForecast(cityname) {
     })
     .then(response => response.json())
     .then(weatherData => {
-        // TO DO
-        // console.log(forecastData.weather[0].icon);
-        console.log("this is weather");
-        console.log(weatherData);
         currentCityTemp.text(weatherData.current.temp + "F");
         currentCityWind.text(weatherData.current.wind_speed + " MPH");
         currentCityHumid.text(weatherData.current.humidity + "%");
@@ -171,13 +167,35 @@ function getForecast(cityname) {
         var imageSrc = `https://openweathermap.org/img/wn/${weatherData.current.weather[0].icon}.png`;
         iconEl.attr("src", imageSrc);
         bigCurrentDate.text(moment.unix(weatherData.current.dt).format("MM/DD/YYYY"));
-        currentCityUVI.text("UV Index: " + weatherData.current.uvi)
+        var bgcolor = uvSpanDisplay(weatherData.current.uvi);
+        $('#uvitext').text("UV Index: ");
+        if (bgcolor == "yellow") {
+            $('#current_city_UVI_colorFrame').css({"background-color": bgcolor});
+        }   
+        else {
+            $('#current_city_UVI_colorFrame').css({"color": "white", "background-color": bgcolor});
+        }
+        $('#current_city_UVI_colorFrame').text(weatherData.current.uvi);
+        
     });
 }
 
 
-
-
+function uvSpanDisplay(uvi) {
+    if (uvi < 3) {
+        var colorFrame = "green";
+    }
+    else if (2 < uvi && uvi < 6) {
+        var colorFrame = "yellow";
+    }
+    else if (5 < uvi && uvi < 8) {
+        var colorFrame = "orange";
+    }
+    else if (7 < uvi) {
+        var colorFrame = "red";
+    }
+    return colorFrame;
+}
 
 // GIVEN a weather dashboard with form inputs
 // WHEN I search for a city
