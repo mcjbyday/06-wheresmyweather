@@ -1,22 +1,14 @@
-
-
 #weather_image {
  filter: invert(100%) ;   
 }
 
-.list_group {
-    flex: 1 1 auto;
-    min-width: 6rem;
-}
-
 .main_container {
     display: flex;
-    
+    flex-wrap: wrap;
     flex-direction: row;
 }
 .list-group-item {
-    /* display: flex; */
-
+    margin-top: 2%;
     align-items: center;
     justify-content: center;
 }
@@ -34,13 +26,36 @@
 }
 
 .current_city_weather {
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 5px;
+    box-sizing: unset;
     margin: 2%;
 }
 
 
 .forecast_card_container {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-    margin: 1%;
+    margin-top: 7px;
     justify-content: space-evenly;
 }
+
+/* 
+Cards are split into two columns at 992px or smaller
+@media screen and (max-width: 960px) {
+
+    .past_search_container {
+        
+        align-items: center;
+    }
+  }
+  
+  
+  @media screen and (max-width: 720px) {
+    .main_container {
+        flex-wrap: wrap;
+    }
+
+  } */

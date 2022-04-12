@@ -98,9 +98,9 @@ function displaySearchHistory() {
 
 function storeCitySearch(searchedCity) {
     if (userSearchHistory === null) {
-        userSearchHistory = [{
-            searchedCityName: searchedCity
-        }];
+        userSearchHistory = [
+            {searchedCityName: searchedCity}
+        ];
     }
     else {
         userSearchHistory.unshift({searchedCityName: searchedCity});
