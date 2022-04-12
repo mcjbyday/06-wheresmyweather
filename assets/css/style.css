@@ -45,21 +45,3 @@
     margin-top: 7px;
     justify-content: space-evenly;
 }
-
-/* 
-Cards are split into two columns at 992px or smaller
-@media screen and (max-width: 960px) {
-
-    .past_search_container {
-        
-        align-items: center;
-    }
-  }
-  
-  
-  @media screen and (max-width: 720px) {
-    .main_container {
-        flex-wrap: wrap;
-    }
-
-  } */

@@ -1,13 +1,3 @@
-// TO DO
-// achieve display for wind speed, temperature, UV index, humidity)
-// local storage of city names entered (last 10)
-
-// DONE
-// use bootsrtap card elements for display of the weather data (// 
-// use bootstrap to get list elements .. https://getbootstrap.com/docs/5.1/components/list-group/
-// image icons // var icon = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
-// error handling pass... 
-
 // open weather  api key. no .env since this key is freely available
 let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
  
@@ -38,6 +28,16 @@ userCityInputEl.keydown( e => {
         weatherSearch(userCityInputEl.val());
     } 
 });    
+
+
+// main function whenever a query is provided by the user
+function weatherSearch(inputText) {
+    storeCitySearch(inputText);
+    clearCards();
+    getWeather(inputText);
+    getForecast(inputText);
+    initializeSearchHistory();
+}
 
 
 // LOCAL STORAGE
@@ -111,17 +111,10 @@ function storeCitySearch(searchedCity) {
 }
 
 
-function weatherSearch(inputText) {
-    // console.log(userCityInputEl.val())
-    storeCitySearch(inputText);
-    clearCards();
-    getWeather(inputText);
-    getForecast(inputText);
-    initializeSearchHistory();
-}
-
 function clearCards() {
+    // clears forecast cards
     $(".five-day").remove();
+    // clears recent search list items
     $(".past-search-item").remove();
 }
 
@@ -136,16 +129,12 @@ function getWeather(cityname) {
     })
     .then(response => response.json())
     .then(forecastData => {
-        // console.log("forecast API");
-        // console.log(forecastData);
+        
         var days = 7;
-        var alph = "abcdef";
-        // console.log(moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY"));
+        // loop through forecast cards and populate relevant data and iconography based on timestamp
         for (i = 0; i < 5; i++) {
             var dt = moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY");
-            var letr = alph[i];
             var imageSrc = `https://openweathermap.org/img/wn/${forecastData.list[days].weather[0].icon}.png`;
-            console.log(imageSrc);
             var forecastCard = $(`<div class="card text-white bg-dark mb-3 five-day" style="min-width: 12rem; max-width: 12rem;"><div class="card-body"><h5 class="card-title">${dt}</h5><p class="card-text "><img src="${imageSrc}"></p><p class="card-text">Temp: ${forecastData.list[days].main.temp} F</p><p class="card-text">Wind: ${forecastData.list[days].wind.speed} MPH</p><p class="card-text">Humidity: ${forecastData.list[days].main.humidity} %</p></div></div>`);
             forecastContainerEl.append(forecastCard);
             days += 8;
@@ -183,7 +172,7 @@ function getForecast(cityname) {
         
     });
 }
-
+// set the background color depending on the UVI severity
 function uvSpanDisplay(uvi) {
     if (uvi < 3) {
         var colorFrame = "green";
@@ -199,8 +188,3 @@ function uvSpanDisplay(uvi) {
     }
     return colorFrame;
 }
-
-
-
-// WHEN I view future weather conditions for that city
-// THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
