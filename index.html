@@ -17,7 +17,7 @@
             Weather Now
             </a>
             <form class="col-3 row">
-                <input type="search" class="form-control form-control-dark col-1" placeholder="Enter your city..." aria-label="Search">
+                <input type="search" id="city_input" class="form-control form-control-dark col-1" placeholder="Enter your city..." aria-label="Search">
             </form>
             <button type="button" class="btn btn-light" id="search_btn">Search</button>
         </div>
@@ -30,7 +30,7 @@
             <!-- <section class= "city_current_weather"> -->
             <div class="current_city_weather card">
                 <div class="card-body">
-                    <h5 class="card-title">Enter a city name to begin...</h5>
+                    <h5 class="card-title">Enter a city name to begin...<span class="my_icon_span"></span></h5>
                     <p class="card-text" id="current_city_temp">Lorem, ipsum.</p>
                     <p class="card-text" id="current_city_wind">Lorem, ipsum.</p>
                     <p class="card-text" id="current_city_humidity">Lorem, ipsum.</p>

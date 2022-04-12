@@ -1,49 +1,103 @@
-// use bootsrtap card elements for display of the weather data (// achieve display for wind speed, temperature, UV index, humidity)
-// use bootstrap to get list elements .. https://getbootstrap.com/docs/5.1/components/list-group/
+// TO DO
+// achieve display for wind speed, temperature, UV index, humidity)
 // local storage of city names entered (last 10)
+
+// DONE
+// use bootsrtap card elements for display of the weather data (// 
+// use bootstrap to get list elements .. https://getbootstrap.com/docs/5.1/components/list-group/
 // image icons // var icon = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
 // error handling pass... 
 
 // open weather  api key. no .env since this key is freely available
 let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
-
  
-
-// placeholder until bootstrap elements are defined
-var bigCityEl = document.querySelector('.card-title');
-// var bigWeatherEl = document.createElement('h1');
-
-var currentCityTemp = document.getElementById("#current_city_temp");
-var currentCityWind = document.getElementById("#current_city_wind");
-var currentCityHumid = document.getElementById("#current_city_humidity");
-var currentCityUVI = document.getElementById("#current_city_UVI");
-var currentWeatherIcon = document.querySelector(".current_weather_icon");
+// select relevant page tags for DOM content injection
+var bigCityEl = $('.card-title');
+var currentCityTemp = $("#current_city_temp");
+var currentCityWind = $("#current_city_wind");
+var currentCityHumid = $("#current_city_humidity");
+var currentCityUVI = $("#current_city_UVI");
+var currentWeatherIcon = $(".current_weather_icon");
 
 // get city name from user form
-// var userCityInputEl = document.createElement('input');
-var userCityInputEl = document.querySelector('.form-control');
+var userCityInputEl = $('#city_input');
 // hook into button it clicking when a keyup equals enter in the form field
-var searchButton = document.querySelector('.btn');
+var searchButton = $('.btn');
 
-searchButton.addEventListener('click', function() {
-    // console.log(userCityInputEl.value)
-    var inputText = userCityInputEl.value;
+// event listeners for button click or search
+searchButton.on("click", weatherSearch);    
+
+userCityInputEl.keydown( e => {
+    if (e.keyCode === 13) {
+        weatherSearch();
+    } 
+});    
+
+
+
+// LOCAL STORAGE
+// get local user storage data in order to append and/or render searches
+var userSearchHistory = JSON.parse(localStorage.getItem("userSearchHistory"));
+
+// list to which past searches will be added
+var searchListContainerEl = $(".list-group");
+initializeSearchHistory();
+
+// check local storage to see if there's some data to grab and display
+function initializeSearchHistory() {
+    // check local storage to see if there's some data to grab and display
+    // if there is something, display it If not, go on with rendering.
+    if (userSearchHistory !== null) {
+        displaySearchHistory();
+    }
+    else {
+        var placeholderSearchItemEl = $(`<a href="#" class="list-group-item list-group-item-action list-group-item-dark text-center" >Prior city searches will appear here...</a>`);
+        searchListContainerEl.append(placeholderSearchItemEl);
+    }
+}
+    
+
+// inject / display the score list into HTML
+function displaySearchHistory() {
+    // sort the searches from most recent to farthest back in time
+    console.log(userSearchHistory);
+    for (var i = 0; i < 5; i++) {
+        // declare the particular list item from the todos array
+        var city = userSearchHistory[i].searchedCityName;
+        // for that list item make the list item in the DOM
+
+        var pastSearchItemEl = $(`<a href="#" class="list-group-item list-group-item-action list-group-item-dark text-center" >${city}</a>`);
+        //style="min-width: 8rem;"
+        // populate its text as array value
+        searchListContainerEl.append(pastSearchItemEl);
+    }
+}
+
+function storeCitySearch(searchedCity) {
+    if (userSearchHistory === null) {
+        userSearchHistory = [{
+            searchedCityName: searchedCity
+        }];
+    }
+    else {
+        userSearchHistory.unshift({searchedCityName: searchedCity});
+    }
+    // console.log(userSearchHistory);
+    // store userSearchHistory item in local storage as strings 
+    localStorage.setItem("userSearchHistory", JSON.stringify(userSearchHistory));
+}
+
+
+function weatherSearch() {
+    // console.log(userCityInputEl.val())
+    var inputText = userCityInputEl.val();
+    // console.log(inputText);
+    storeCitySearch(inputText);
     getWeather(inputText);
     getForecast(inputText);
-});    
+}
 
-
-userCityInputEl.addEventListener("keyup", e => {
-    // console.log(e.keyCode);
-    if (e.keyCode === 13) {
-        e.preventDefault();
-        document.getElementById("search_btn").click();
-    }    
-    // console.log(e);
-    // console.log(userCityInputEl.value);
-});    
-
-
+// RETRIEVE GEOLOCATION DATA AND CITY FORECAST DATA
 function getWeather(cityname) {
     // console.log(cityname);
     // geocoding API fetch
@@ -51,36 +105,32 @@ function getWeather(cityname) {
     .then(response => response.json())
     .then(latlongData => {
         
-        // console.log(latlongData);
-        // latlongEl.textContent = latlongData[0].lat + " " + latlongData[0].lon;
-        // bigCityEl.textContent = latlongData[0].name;
-        // forecasting API fetch, using geo data as parameter to pass
         return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
     })
     .then(response => response.json())
     .then(cityData => {
-        // things
+        console.log(cityData);
     });
-
 }
-
+// RETRIEVE REMAINING CITY WEATHER STATUS ICON AND FORECAST
 function getForecast(cityname) {
-    // EITHER
-    // fetch(`https://FOO.COM/api/${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
-    // OR
     fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${key}`)
     .then(response => response.json())
     .then(forecastData => {
+        // TO DO
         // console.log(forecastData.weather[0].icon);
-        var iconEl = document.createElement('img');
+        console.log("this is forecast");
+        console.log(forecastData);
+        var iconEl = $('my_icon_span');
         iconEl.src = `https://openweathermap.org/img/wn/${forecastData.weather[0].icon}.png`;
-        bigCityEl.textContent = cityname;
-        bigCityEl.appendChild(iconEl);
+        bigCityEl.val(cityname);
+        // bigCityEl.append(iconEl);
         
-        // update display elements...
     });
 }
 
+
+// CARD DISPLAY PROTOTYPE
 // card element forecast generation prototype/pseudocode
 var forecastContainerEl = $('.forecast_card_container');
 
@@ -89,23 +139,6 @@ for (i = 0; i < 5; i++) {
     forecastContainerEl.append(forecastCard);
 }
 
-// prior searches list item generation prototype/pseudocode
-// local storage prior searches list item 
-var pastSearchContainerEl = $('.list-group');
-for (i = 0; i < 5; i++) {
-    var pastSearchItemEl = $(`<a href="#" class="list-group-item list-group-item-action list-group-item-dark" >A simple dark list group item number ${i}</a>`);
-    //style="min-width: 8rem;"
-    pastSearchContainerEl.append(pastSearchItemEl);
-}
-// console.log(https://openweathermap.org/img/wn/${weather.weather[0].icon}.png;
-// congressEl.src = data.item.image_url;
-// var iconEl = bigCityEl.insertAdjacentElement('beforeend','span');
-// var iconAddress = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
-// iconEl.src = ;
-// var iconAddress = `https://openweathermap.org/img/w/${cityData.list[0].weather[0].main}.png`;
-// currentWeatherIcon.setAttribute("style","content: URL(${`https://openweathermap.org/img/w/${cityData.list[0].weather[0].main}.png`}");
-// bigWeatherEl.textContent = cityData.list[0].weather[0].main;
-        
 
 
 
@@ -143,38 +176,3 @@ for (i = 0; i < 5; i++) {
 // --- after API calls are successful --- 
 // achieve display for wind speed, temperature, UV index, humidity
 // use ICON Url for displaying ICONS for weather
-
-
-// var badRequestUrl = 'https://api.github.com/unicorns';
-// var redirectUrl = './404.html';
-// DONE pass city?
-
-
-
-
-
-// fetch(weatherInfoRequest).then(function(response) {
-//   // Use a conditional to check the response status.
-//   console.log(response.status);
-//     // Then write the conditional based on that response.status value
-//     if (response.status === 403 || response.status === 404) {
-//       window.location.replace(redirectUrl);
-//     });
-
-
-
-
-//  fetch(`https://www.omdbapi.com/?apikey=${OMDbkey}&t=clerks`)
-//  .then(response => response.json())
-//  .then(data => {
-//      console.log(data);
-//     movieEl.textContent = data.Title + " released on " + data.Released;
-//  })
-
-
-//  fetch(`https://www.loc.gov/item/92522692?fo=json`)
-//  .then(response => response.json())
-//  .then(data => {
-//      console.log(data.item.image_url);
-//     congressEl.src = data.item.image_url;
-//  })
