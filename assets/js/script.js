@@ -32,6 +32,7 @@ searchButton.on("click", weatherSearch);
 
 userCityInputEl.keydown( e => {
     if (e.keyCode === 13) {
+        e.preventDefault();
         weatherSearch();
     } 
 });    
@@ -137,7 +138,7 @@ function getWeather(cityname) {
     .then(forecastData => {
         // console.log("forecast API");
         // console.log(forecastData);
-        // var days = 6;
+        var days = 6;
         // console.log(moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY"));
         for (i = 0; i < 5; i++) {
             var dt = moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY");
