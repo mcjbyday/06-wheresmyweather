@@ -12,7 +12,20 @@
     display: flex;
     flex-direction: row;
 }
+.list-group-item {
+    /* display: flex; */
 
+    align-items: center;
+    justify-content: center;
+}
+
+.past_search_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+    /* min-width: 8rem; */
+}
 
 .weather_content {
     display: flex;
@@ -22,6 +35,7 @@
 .current_city_weather {
     margin: 2%;
 }
+
 
 .forecast_card_container {
     display: flex;
