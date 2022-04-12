@@ -12,12 +12,15 @@
 let key = "7ae7dba060e77b33b1fb1687f4a2e16b";
  
 // select relevant page tags for DOM content injection
-var bigCityEl = $('.card-title');
+var bigCityEl = $('.current_city_name');
+var bigCurrentDate = $('.current_date');
+var iconEl = $('.icon_span');
 var currentCityTemp = $("#current_city_temp");
 var currentCityWind = $("#current_city_wind");
 var currentCityHumid = $("#current_city_humidity");
 var currentCityUVI = $("#current_city_UVI");
 var currentWeatherIcon = $(".current_weather_icon");
+var forecastContainerEl = $('.forecast_card_container');
 
 // get city name from user form
 var userCityInputEl = $('#city_input');
@@ -60,8 +63,17 @@ function initializeSearchHistory() {
 // inject / display the score list into HTML
 function displaySearchHistory() {
     // sort the searches from most recent to farthest back in time
-    console.log(userSearchHistory);
-    for (var i = 0; i < 5; i++) {
+    if (userSearchHistory.length > 5) {
+        var iterateLength = 5;
+    }
+    else if (userSearchHistory.length <= 5 && userSearchHistory.length > 0) {
+        var iterateLength = userSearchHistory.length;
+    }
+    else if (userSearchHistory.length === null) {
+        return;
+    }
+    // console.log(userSearchHistory);
+    for (var i = 0; i < iterateLength; i++) {
         // declare the particular list item from the todos array
         var city = userSearchHistory[i].searchedCityName;
         // for that list item make the list item in the DOM
@@ -93,8 +105,13 @@ function weatherSearch() {
     var inputText = userCityInputEl.val();
     // console.log(inputText);
     storeCitySearch(inputText);
+    clearCards();
     getWeather(inputText);
     getForecast(inputText);
+}
+
+function clearCards() {
+    $(".five-day").remove();
 }
 
 // RETRIEVE GEOLOCATION DATA AND CITY FORECAST DATA
@@ -104,40 +121,43 @@ function getWeather(cityname) {
     fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${cityname}&appid=${key}`)
     .then(response => response.json())
     .then(latlongData => {
-        
-        return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latlongData[0].lat}&lon=${latlongData[0].lon}&appid=${key}`)
+        return fetch(`https://api.openweathermap.org/data/2.5/forecast?units=imperial&lat=${(latlongData[0].lat).toFixed(4)}&lon=${(latlongData[0].lon).toFixed(4)}&appid=${key}`)
     })
     .then(response => response.json())
-    .then(cityData => {
-        console.log(cityData);
+    .then(forecastData => {
+        console.log("forecast API");
+        console.log(forecastData);
+        var days = 8;
+        console.log(moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY"));
+        for (i = 0; i < 5; i++) {
+            var dt = moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY");
+            var forecastCard = $(`<div class="card text-white bg-dark mb-3 five-day" style="min-width: 12rem; max-width: 12rem;"><div class="card-body"><h5 class="card-title">${dt}</h5><p class="card-text">ICON</p><p class="card-text">Temp: ${forecastData.list[days].main.temp} F</p><p class="card-text">Wind: ${forecastData.list[days].wind.speed} MPH</p><p class="card-text">Humidity: ${forecastData.list[days].main.humidity} %</p></div></div>`);
+            forecastContainerEl.append(forecastCard);
+            days += 8;
+        }
     });
 }
 // RETRIEVE REMAINING CITY WEATHER STATUS ICON AND FORECAST
 function getForecast(cityname) {
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${key}`)
+    // geocoding API fetch
+    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${cityname}&appid=${key}`)
     .then(response => response.json())
-    .then(forecastData => {
+    .then(latlongData => {
+        return fetch(`https://api.openweathermap.org/data/2.5/onecall?${latlongData[0].lat}&lon=${latlongData[0].lon}&exclude=hourly,daily&appid=${key}`)
+    })
+    .then(response => response.json())
+    .then(weatherData => {
         // TO DO
         // console.log(forecastData.weather[0].icon);
-        console.log("this is forecast");
-        console.log(forecastData);
-        var iconEl = $('my_icon_span');
-        iconEl.src = `https://openweathermap.org/img/wn/${forecastData.weather[0].icon}.png`;
+        console.log("this is weather");
+        console.log(weatherData);
         bigCityEl.val(cityname);
-        // bigCityEl.append(iconEl);
+        iconEl.src = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`;
+        bigCurrentDate.val(moment.unix(weatherData.list[0].dt).format("MM/DD/YYYY"));
         
     });
 }
 
-
-// CARD DISPLAY PROTOTYPE
-// card element forecast generation prototype/pseudocode
-var forecastContainerEl = $('.forecast_card_container');
-
-for (i = 0; i < 5; i++) {
-    var forecastCard = $(`<div class="card text-white bg-dark mb-3" style="min-width: 12rem; max-width: 12rem;"><div class="card-body"><h5 class="card-title">Card number ${i}</h5><p class="card-text">Lorem ipsum dolor sit amet.</p><p class="card-text">Lorem ipsum dolor sit amet.</p><p class="card-text">Lorem ipsum dolor sit amet.</p><p class="card-text">Lorem ipsum dolor sit amet.</p></div></div>`);
-    forecastContainerEl.append(forecastCard);
-}
 
 
 
