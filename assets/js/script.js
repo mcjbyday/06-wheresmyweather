@@ -135,7 +135,7 @@ function getWeather(cityname) {
         for (i = 0; i < 5; i++) {
             var dt = moment.unix(forecastData.list[days].dt).format("MM/DD/YYYY");
             var imageSrc = `https://openweathermap.org/img/wn/${forecastData.list[days].weather[0].icon}.png`;
-            var forecastCard = $(`<div class="card text-white bg-dark mb-3 five-day" style="min-width: 12rem; max-width: 12rem;"><div class="card-body"><h5 class="card-title">${dt}</h5><p class="card-text "><img src="${imageSrc}"></p><p class="card-text">Temp: ${forecastData.list[days].main.temp} F</p><p class="card-text">Wind: ${forecastData.list[days].wind.speed} MPH</p><p class="card-text">Humidity: ${forecastData.list[days].main.humidity} %</p></div></div>`);
+            var forecastCard = $(`<div class="card text-white bg-dark mb-3 five-day" style="min-width: 12rem; max-width: 12rem;"><div class="card-body"><h5 class="card-title">${dt}</h5><p class="card-text "><img src="${imageSrc}"></p><p class="card-text">Temp: ${forecastData.list[days].main.temp}°F</p><p class="card-text">Wind: ${forecastData.list[days].wind.speed} MPH</p><p class="card-text">Humidity: ${forecastData.list[days].main.humidity} %</p></div></div>`);
             forecastContainerEl.append(forecastCard);
             days += 8;
         }
@@ -153,9 +153,9 @@ function getForecast(cityname) {
     })
     .then(response => response.json())
     .then(weatherData => {
-        currentCityTemp.text(weatherData.current.temp + "F");
-        currentCityWind.text(weatherData.current.wind_speed + " MPH");
-        currentCityHumid.text(weatherData.current.humidity + "%");
+        currentCityTemp.text("Temp: " + weatherData.current.temp + "°F");
+        currentCityWind.text("Wind: " + weatherData.current.wind_speed + " MPH");
+        currentCityHumid.text("Humidity: " + weatherData.current.humidity + " %");
         bigCityEl.text(cityname);
         var imageSrc = `https://openweathermap.org/img/wn/${weatherData.current.weather[0].icon}.png`;
         iconEl.attr("src", imageSrc);
