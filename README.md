@@ -16,8 +16,8 @@ as a user I want to see the weather outlook for multiple cities so that I can ta
 - [Open Weather One Call API 1.0](https://openweathermap.org/api/one-call-api)
 - [Open Weather  5 day weather forecast API](https://openweathermap.org/forecast5)
 
-## Links
-See it live:<br> [https://mcjbyday.github.io/06-wheresmyweather/](https://mcjbyday.github.io/06-wheresmyweather/)
+## Live Application
+See it [live!](https://mcjbyday.github.io/wheresmyweather/)
 
     
 ## Screenshots
